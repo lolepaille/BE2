@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
     <title>Studio BE</title>
     <style>
+
+
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
             background-color: #e6e1d6;
-            font-family: Arial, sans-serif;
+             font-family: "Nunito", sans-serif;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -18,6 +24,7 @@
             cursor: default;
             perspective: 1000px;
         }
+      
         img.logo-image {
             width: 400px;
             height: auto;
@@ -65,7 +72,7 @@
             margin-bottom: -20px;
         }
 
-  
+
 
         .be-text {
             position: absolute;
@@ -80,31 +87,31 @@
             perspective: 800px;
             transform-style: preserve-3d;
             opacity: 0; /* Start hidden */
-            animation-duration: 10s;
+            animation-duration: 30s;
             animation-iteration-count: infinite;
             animation-timing-function: ease-in-out;
         }
         
         @keyframes float1 {
             0% { transform: translate3d(0, 0, 0); }
-            25% { transform: translate3d(10px, -10px, 5px); }
-            50% { transform: translate3d(5px, 15px, -5px); }
-            75% { transform: translate3d(-10px, 5px, 10px); }
+            25% { transform: translate3d(5px, -5px, 2px); }
+            50% { transform: translate3d(2px, 8px, -2px); }
+            75% { transform: translate3d(-5px, 3px, 5px); }
             100% { transform: translate3d(0, 0, 0); }
         }
 
         @keyframes float2 {
             0% { transform: translate3d(0, 0, 0); }
-            25% { transform: translate3d(-15px, 10px, 5px); }
-            50% { transform: translate3d(5px, -15px, -10px); }
-            75% { transform: translate3d(15px, 5px, 15px); }
+            25% { transform: translate3d(-7px, 5px, 3px); }
+            50% { transform: translate3d(3px, -7px, -3px); }
+            75% { transform: translate3d(7px, 2px, 7px); }
             100% { transform: translate3d(0, 0, 0); }
         }
 
         @keyframes float3 {
             0% { transform: translate3d(0, 0, 0); }
-            33% { transform: translate3d(12px, 15px, -8px); }
-            66% { transform: translate3d(-12px, -8px, 12px); }
+            33% { transform: translate3d(6px, 8px, -4px); }
+            66% { transform: translate3d(-6px, -4px, 6px); }
             100% { transform: translate3d(0, 0, 0); }
         }
 
@@ -121,9 +128,28 @@
                 font-size: 1.2rem;
             }
         }
+        canvas#c {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
+    <canvas id="c"></canvas>
+    <div class="overlay"></div>
     <div class="container" id="container">
         <div class="logo">
             <img src="logo.png" class="logo-image" alt="Studio BE Logo">
@@ -131,165 +157,123 @@
     </div>
 
     <script>
-        // BE phrases to display around the logo
-        const phrases = [
-            "BE sensitive", "BE intuitive", "BE inclusive", "BE deadly",
-            "BE sunny", "BE intuitive", "BE the opposite", "BE regenerative",
-            "BE universal", "BE curious", "BE like a bee", "BE creative",
-            "BE a lover of design", "BE responsible", "BE funny", "BE them",
-            "BE serious", "BE kind", "BE an enabler", "BE you",
-            "BE brave", "BE wild", "BE welcoming", "BE free",
-            "BE whatever you want to BE", "BE joyful",
-            "BE (Built Environment)", "BE good, BE good (only Johnny though)"
-        ];
-
-        const container = document.getElementById('container');
-        const containerRect = container.getBoundingClientRect();
-        const centerX = containerRect.width / 2;
-        const centerY = containerRect.height / 2;
-        
-        // Use a larger radius to spread elements more
-        const radius = Math.min(centerX, centerY) * 1.2;
-        
-        // Create and position BE text elements in a more random pattern
-        phrases.forEach((phrase, index) => {
-            const element = document.createElement('div');
-            element.classList.add('be-text');
-            element.textContent = phrase;
-            
-            // Calculate position with more randomness
-            const angle = (index / phrases.length) * Math.PI * 2;
-            
-            // Add randomness to radius for more spread
-            const randomRadius = radius * (0.7 + Math.random() * 0.6);
-            
-            // Basic circular position
-            const x = centerX + randomRadius * Math.cos(angle);
-            const y = centerY + randomRadius * Math.sin(angle);
-            
-            // Add z position for 3D effect
-            const z = Math.random() * 200 - 100;
-            
-            element.style.left = `${x}px`;
-            element.style.top = `${y}px`;
-            element.dataset.baseX = x;
-            element.dataset.baseY = y;
-            element.dataset.baseZ = z;
-            element.dataset.angle = angle;
-            
-            // Assign one of three floating animations with random delay
-            const floatAnimations = ['float1', 'float2', 'float3'];
-            const randomAnimation = floatAnimations[Math.floor(Math.random() * floatAnimations.length)];
-            const randomDelay = Math.random() * 5; // Random delay between 0-5s
-            
-            element.style.animationName = randomAnimation;
-            element.style.animationDelay = `${randomDelay}s`;
-            
-            container.appendChild(element);
-        });
-
-        const beTexts = document.querySelectorAll('.be-text');
-        
-        // Reveal text elements on hover
-        container.addEventListener('mouseenter', () => {
-            beTexts.forEach((element, index) => {
-                // Stagger the appearance for a nice effect
-                setTimeout(() => {
-                    element.style.opacity = '1';
-                }, index * 50); // Stagger by 50ms per element
-            });
-        });
-        
-        // For mobile, reveal on first touch
-        container.addEventListener('touchstart', () => {
-            beTexts.forEach((element, index) => {
-                setTimeout(() => {
-                    element.style.opacity = '1';
-                }, index * 50);
-            });
-        }, { once: true });
-        
-        // Automatically show elements after a brief delay (for better mobile experience)
-        setTimeout(() => {
-            beTexts.forEach((element, index) => {
-                setTimeout(() => {
-                    element.style.opacity = '1';
-                }, index * 50);
-            });
-        }, 1500);
-        
-        // Mouse/touch movement effect with avoidance behavior
-        function handleMovement(event) {
-            let mouseX, mouseY;
-            
-            if (event.type === 'touchmove') {
-            mouseX = event.touches[0].clientX;
-            mouseY = event.touches[0].clientY;
-            } else {
-            mouseX = event.clientX;
-            mouseY = event.clientY;
+    window.onload = function(argument) {
+        // var lyric = "i couldn't take it couldn't stand another minute couldn't bear another day without you in it";
+        var lyric = "BE sensitive, BE inclusive, BE sunny, BE the opposite, BE universal, BE like a bee, BE a lover of design, BE funny, BE serious, BE an enabler, BE brave, BE welcoming, BE whatever you want to BE, BE (Built Environment), BE intuitive, BE deadly, BE intuitive, BE regenerative, BE curious, BE creative, BE responsible, BE them, BE kind, BE you, BE wild, BE free, BE joyful, BE good, BE good (only Johnny though)BE sensitive, BE inclusive, BE sunny, BE the opposite, BE universal, BE like a bee, BE a lover of design, BE funny, BE serious, BE an enabler, BE brave, BE welcoming, BE whatever you want to BE, BE (Built Environment), BE intuitive, BE deadly, BE intuitive, BE regenerative, BE curious, BE creative, BE responsible, BE them, BE kind, BE you, BE wild, BE free, BE joyful, BE good, BE good (only Johnny though)BE sensitive, BE inclusive, BE sunny, BE the opposite, BE universal, BE like a bee, BE a lover of design, BE funny, BE serious, BE an enabler, BE brave, BE welcoming, BE whatever you want to BE, BE (Built Environment), BE intuitive, BE deadly, BE intuitive, BE regenerative, BE curious, BE creative, BE responsible, BE them, BE kind, BE you, BE wild, BE free, BE joyful, BE good, BE good (only Johnny though)BE sensitive, BE inclusive, BE sunny, BE the opposite, BE universal, BE like a bee, BE a lover of design, BE funny, BE serious, BE an enabler, BE brave, BE welcoming, BE whatever you want to BE, BE (Built Environment), BE intuitive, BE deadly, BE intuitive, BE regenerative, BE curious, BE creative, BE responsible, BE them, BE kind, BE you, BE wild, BE free, BE joyful, BE good, BE good (only Johnny though)BE sensitive, BE inclusive, BE sunny, BE the opposite, BE universal, BE like a bee, BE a lover of design, BE funny, BE serious, BE an enabler, BE brave, BE welcoming, BE whatever you want to BE, BE (Built Environment), BE intuitive, BE deadly, BE intuitive, BE regenerative, BE curious, BE creative, BE responsible, BE them, BE kind, BE you, BE wild, BE free, BE joyful, BE good, BE good (only Johnny though)BE sensitive, BE inclusive, BE sunny, BE the opposite, BE universal, BE like a bee, BE a lover of design, BE funny, BE serious, BE an enabler, BE brave, BE welcoming, BE whatever you want to BE, BE (Built Environment), BE intuitive, BE deadly, BE intuitive, BE regenerative, BE curious, BE creative, BE responsible, BE them, BE kind, BE you, BE wild, BE free, BE joyful, BE good, BE good (only Johnny though) BE sensitive, BE inclusive, BE sunny, BE the opposite, BE universal, BE like a bee, BE a lover of design, BE funny, BE serious, BE an enabler, BE brave, BE welcoming, BE whatever you want to BE, BE (Built Environment), BE intuitive, BE deadly, BE intuitive, BE regenerative, BE curious, BE creative, BE responsible, BE them, BE kind, BE you, BE wild, BE free, BE joyful, BE good, BE good (only Johnny though)";
+        var words = {};
+        var words_attr = [];
+        string_handle(lyric);
+    
+        var canvas = document.getElementById('c');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    
+        if (canvas.getContext) {
+            var c = canvas.getContext('2d'),
+                w = canvas.width,
+                h = canvas.height;
+    
+            c.strokeStyle = 'red';
+            c.fillStyle = 'white';
+            c.lineWidth = 5;
+    
+            // constructor
+            Word = function(key) {
+                this.text = key;
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.font = words[key] * 10 + 'px Nunito';
+                this.speed = 0.1;  // slower horizontal speed
+            };
+            for (var key in words) {
+                words_attr.push(new Word(key));
             }
-
-            beTexts.forEach(element => {
-            const baseX = parseFloat(element.dataset.baseX);
-            const baseY = parseFloat(element.dataset.baseY);
-            const baseZ = parseFloat(element.dataset.baseZ);
-
-            // Calculate distance between mouse and element
-            const dx = mouseX - baseX;
-            const dy = mouseY - baseY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            // Define interaction radius and maximum movement
-            const radius = 200;
-            const maxMove = 50;
-
-            if (distance < radius) {
-                // Calculate repulsion strength (stronger when closer)
-                const force = (1 - distance / radius) * maxMove;
-                
-                // Calculate repulsion direction
-                const angle = Math.atan2(dy, dx);
-                
-                // Apply repulsion
-                const moveX = -Math.cos(angle) * force;
-                const moveY = -Math.sin(angle) * force;
-                const moveZ = (radius - distance) / 2;
-
-                // Apply transformation with smooth transition
-                element.style.transform = `translate3d(${moveX}px, ${moveY}px, ${moveZ}px)`;
-            } else {
-                // Return to original position with float animation
-                element.style.transform = `translate3d(0, 0, ${baseZ}px)`;
+    
+            function animation() {
+                // Set default font for context before drawing words
+                c.font = '1.5rem Nunito';
+                for (var i = 0; i < words_attr.length; i++) {
+                    c.font = words_attr[i].font;
+                    c.fillText(words_attr[i].text, words_attr[i].x, words_attr[i].y);
+                    words_attr[i].width = c.measureText(words_attr[i].text).width;
+                    c.stroke();
+                }
+                move();
             }
-            });
+    
+            function move() {
+                for (var i = 0; i < words_attr.length; i++) {
+                    if (words_attr[i].x > w) {
+                        words_attr[i].x = -words_attr[i].width;
+                        words_attr[i].y = Math.random() * h;
+                    } else {
+                        words_attr[i].x += words_attr[i].speed;
+                    }
+                }
+            }
+    
+            setInterval(function() {
+                c.clearRect(0, 0, w, h);
+                animation();
+            }, 24);
         }
-
-        // Add event listeners for mouse and touch events
-        document.addEventListener('mousemove', handleMovement);
-        document.addEventListener('touchmove', handleMovement, { passive: true });
-        
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            const containerRect = container.getBoundingClientRect();
-            const centerX = containerRect.width / 2;
-            const centerY = containerRect.height / 2;
-            const radius = Math.min(centerX, centerY) * 1.2;
-            
-            beTexts.forEach((element, index) => {
-                const angle = (index / beTexts.length) * Math.PI * 2;
-                const randomRadius = radius * (0.7 + Math.random() * 0.6);
-                const x = centerX + randomRadius * Math.cos(angle);
-                const y = centerY + randomRadius * Math.sin(angle);
-                const z = Math.random() * 200 - 100;
-                
-                element.style.left = `${x}px`;
-                element.style.top = `${y}px`;
-                element.dataset.baseX = x;
-                element.dataset.baseY = y;
-                element.dataset.baseZ = z;
-            });
-        });
+    
+        function string_handle(str) {
+            var split_str = str.split(" ");
+            var word_array = [];
+            var word_count = [];
+            for (var i = 0; i < split_str.length; i++) {
+                var check = true;
+                for (var j = 0; j < word_array.length; j++) {
+                    if (split_str[i] === word_array[j]) {
+                        word_count[j]++;
+                        check = false;
+                        break;
+                    }
+                }
+                if (check) {
+                    word_array.push(split_str[i]);
+                    word_count.push(1);
+                }
+            }
+            for (var i = 0; i < word_array.length; i++) {
+                words[word_array[i]] = word_count[i];
+            }
+            return words;
+        }
+    };
+    </script>
+    <script>
+    var phrases = [
+        "BE sensitive",
+        "BE inclusive",
+        "BE sunny",
+        "BE the opposite",
+        "BE universal",
+        "BE like a bee",
+        "BE a lover of design",
+        "BE funny",
+        "BE serious",
+        "BE an enabler",
+        "BE brave",
+        "BE welcoming",
+        "BE whatever you want to BE",
+        "BE (Built Environment)",
+        "BE intuitive",
+        "BE deadly",
+        "BE intuitive",
+        "BE regenerative",
+        "BE curious",
+        "BE creative",
+        "BE responsible",
+        "BE them",
+        "BE kind",
+        "BE you",
+        "BE wild",
+        "BE free",
+        "BE joyful",
+        "BE good, BE good (only Johnny though)"
+    ];
     </script>
 </body>
 </html>
